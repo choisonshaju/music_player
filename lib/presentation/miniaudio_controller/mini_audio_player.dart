@@ -26,9 +26,7 @@ class MiniAudioPlayer extends StatelessWidget {
               gradient: LinearGradient(
                   colors: [Colors.lightGreen, Colors.lightBlueAccent],
                   begin: Alignment.topLeft,
-                  end: Alignment.bottomRight)
-              // color: Color.fromARGB(115, 255, 153, 0),
-              ),
+                  end: Alignment.bottomRight)),
           padding: EdgeInsets.all(16),
           height: 101,
           child: Obx(

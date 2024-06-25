@@ -93,20 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.elliptical(10, 10)),
                               color: Color.fromARGB(87, 0, 0, 0),
-                              // gradient: LinearGradient(
-                              //     begin: Alignment.bottomLeft,
-                              //     end: Alignment.topRight,
-                              //     colors: [
-                              //       Color.fromARGB(255, 188, 220, 246),
-                              //       const Color.fromARGB(255, 144, 202, 249),
-                              //       Color.fromARGB(255, 99, 177, 241)
-                              //     ])
                             ),
                             child: ListTile(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
-                              // tileColor: bgDarkColor,
-                              // splashColor: Colors.red,
                               title: Text(
                                 songs[index].displayNameWOExt,
                                 maxLines: 1,
@@ -136,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       size: 26,
                                     )
                                   : null,
-
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
