@@ -5,6 +5,7 @@ import 'package:music_player/core/constant/color.dart';
 import 'package:music_player/presentation/home_screen/controller/controller.dart';
 import 'package:music_player/presentation/miniaudio_controller/mini_audio_player.dart';
 import 'package:music_player/presentation/player_screen/view/player_screen.dart';
+import 'package:music_player/presentation/settings_screen/view/settings_screen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,7 +28,31 @@ class _HomeScreenState extends State<HomeScreen> {
           style: title(),
         ),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: PopupMenuButton(
+              shape:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SettingsScreen(),
+                    ),
+                  ),
+                  child: Text("SETTINGS"),
+                ),
+              ],
+              child: Icon(
+                Icons.more_vert,
+                //size: 28,
+              ),
+            ),
+          )
+        ],
       ),
+
       body: FutureBuilder(
         future: controller.querySongs(),
         builder: (BuildContext context, snapshot) {

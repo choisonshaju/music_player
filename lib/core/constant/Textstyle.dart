@@ -17,3 +17,19 @@ title() {
     fontWeight: FontWeight.bold,
   );
 }
+
+heading() {
+  return TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: bgDarkColor,
+  );
+}
+
+subheading() {
+  return TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    color: bgDarkColor,
+  );
+}

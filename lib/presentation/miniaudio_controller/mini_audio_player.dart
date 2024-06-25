@@ -30,7 +30,7 @@ class MiniAudioPlayer extends StatelessWidget {
               // color: Color.fromARGB(115, 255, 153, 0),
               ),
           padding: EdgeInsets.all(16),
-          height: 100,
+          height: 101,
           child: Obx(
             () {
               var currentSong = controller.songs.isNotEmpty
