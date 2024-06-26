@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
-import 'package:music_player/core/constant/Textstyle.dart';
-import 'package:music_player/core/constant/color.dart';
-import 'package:music_player/presentation/home_screen/controller/controller.dart';
+import 'package:FloBeat/core/constant/Textstyle.dart';
+import 'package:FloBeat/core/constant/color.dart';
+import 'package:FloBeat/presentation/home_screen/controller/controller.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 

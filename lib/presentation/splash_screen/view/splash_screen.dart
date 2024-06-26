@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/presentation/home_screen/view/home_screen.dart';
+import 'package:FloBeat/presentation/home_screen/view/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

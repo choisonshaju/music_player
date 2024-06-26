@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:music_player/presentation/home_screen/controller/controller.dart';
-import 'package:music_player/presentation/player_screen/view/player_screen.dart';
+import 'package:FloBeat/presentation/home_screen/controller/controller.dart';
+import 'package:FloBeat/presentation/player_screen/view/player_screen.dart';
 
 class MiniAudioPlayer extends StatelessWidget {
   final Playercontroller controller = Get.find();
@@ -22,11 +22,13 @@ class MiniAudioPlayer extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              gradient: LinearGradient(
-                  colors: [Colors.lightGreen, Colors.lightBlueAccent],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight)),
+            borderRadius: BorderRadius.circular(25),
+            gradient: LinearGradient(
+              colors: [Colors.lightGreen, Colors.lightBlueAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
           padding: EdgeInsets.all(16),
           height: 101,
           child: Obx(

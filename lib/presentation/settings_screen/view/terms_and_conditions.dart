@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/constant/Textstyle.dart';
+import 'package:FloBeat/core/constant/Textstyle.dart';
 
 class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({super.key});

@@ -1,4 +1,4 @@
-# music_player
+# FloBeat
 
 A new Flutter project.
 

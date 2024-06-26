@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/constant/color.dart';
+import 'package:FloBeat/core/constant/color.dart';
 
 text() {
   return TextStyle(

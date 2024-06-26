@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/presentation/settings_screen/view/privacy_screen.dart';
-import 'package:music_player/presentation/settings_screen/view/terms_and_conditions.dart';
+import 'package:FloBeat/presentation/settings_screen/view/privacy_screen.dart';
+import 'package:FloBeat/presentation/settings_screen/view/terms_and_conditions.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
