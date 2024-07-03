@@ -5,47 +5,48 @@ import 'package:FloBeat/presentation/player_screen/view/player_screen.dart';
 
 class MiniAudioPlayer extends StatelessWidget {
   final Playercontroller controller = Get.find();
-  final Playercontroller data = Playercontroller();
-  final controller1 = Get.put(Playercontroller());
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 33),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => PlayerScreen(data: controller1.songs),
-            ),
-          );
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            gradient: LinearGradient(
-              colors: [Colors.lightGreen, Colors.lightBlueAccent],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          padding: EdgeInsets.all(16),
-          height: 101,
-          child: Obx(
-            () {
-              var currentSong = controller.songs.isNotEmpty
-                  ? controller.songs[controller.playIndex.value]
-                  : null;
-
-              return Column(
+    return Obx(
+      () => Visibility(
+        visible: controller.miniPlayerVisible.value,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 33),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => PlayerScreen(data: controller.songs),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                gradient: LinearGradient(
+                  colors: [Colors.lightGreen, Colors.lightBlueAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              padding: EdgeInsets.all(16),
+              height: 110,
+              child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Text(
-                      currentSong != null ? currentSong.title : "",
-                      maxLines: 1,
+                    child: Obx(
+                      () => Text(
+                        controller.songs.isNotEmpty
+                            ? controller.songs[controller.playIndex.value].title
+                            : "",
+                        maxLines: 1,
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
+                  SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -81,8 +82,8 @@ class MiniAudioPlayer extends StatelessWidget {
                     ],
                   ),
                 ],
-              );
-            },
+              ),
+            ),
           ),
         ),
       ),

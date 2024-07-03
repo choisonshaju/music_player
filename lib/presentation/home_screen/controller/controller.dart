@@ -19,14 +19,24 @@ class Playercontroller extends GetxController {
   var max = 0.0.obs;
   var value = 0.0.obs;
 
+  var searchQuery = ''.obs;
+
+  var miniPlayerVisible = false.obs; // State variable for miniplayer visibility
+
   @override
   void onInit() {
     super.onInit();
     checkPermission();
     initAudioPlayer();
-    audioPlayer.playerStateStream.listen((State) {
-      if (State.processingState == ProcessingState.completed) {
+    querySongs();
+    // Listen to player state changes
+    audioPlayer.playerStateStream.listen((state) {
+      isplaying.value = state.playing; // Update isplaying based on player state
+      if (state.processingState == ProcessingState.completed) {
         playNext();
+        if (searchQuery.isEmpty) {
+          playNext();
+        }
       }
     });
   }
@@ -40,8 +50,11 @@ class Playercontroller extends GetxController {
       position.value = p.toString().split(".")[0];
       value.value = p.inSeconds.toDouble();
     });
+    // Ensure miniplayer remains visible when playing or paused
     audioPlayer.playerStateStream.listen((state) {
-      isplaying.value = state.playing;
+      if (state.playing || state.processingState == ProcessingState.completed) {
+        miniPlayerVisible.value = true;
+      }
     });
   }
 
@@ -99,9 +112,8 @@ class Playercontroller extends GetxController {
   void checkPermission() async {
     var perm = await Permission.storage.request();
     if (perm.isGranted) {
-      // Permission granted, do nothing
+      await querySongs();
     } else {
-      // Permission not granted, request again
       checkPermission();
     }
   }
@@ -113,11 +125,37 @@ class Playercontroller extends GetxController {
   }
 
   Future<void> querySongs() async {
-    songs.value = await audioQuery.querySongs(
+    List<SongModel> fetchedSongs = await audioQuery.querySongs(
       ignoreCase: true,
       orderType: OrderType.ASC_OR_SMALLER,
       sortType: null,
       uriType: UriType.EXTERNAL,
     );
+
+    data = fetchedSongs;
+
+    if (searchQuery.isNotEmpty) {
+      search(searchQuery.value);
+    } else {
+      songs.value = data;
+    }
+  }
+
+  void search(String query) {
+    searchQuery.value = query.toLowerCase();
+    if (query.isEmpty) {
+      songs.value = data;
+    } else {
+      songs.value = data
+          .where((song) =>
+              song.title.toLowerCase().contains(query) ||
+              song.artist!.toLowerCase().contains(query))
+          .toList();
+    }
+  }
+
+  void closeMiniPlayer() {
+    audioPlayer.stop(); // Stop audio playback
+    miniPlayerVisible.value = false; // Hide miniplayer
   }
 }
