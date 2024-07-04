@@ -34,9 +34,6 @@ class Playercontroller extends GetxController {
       isplaying.value = state.playing; // Update isplaying based on player state
       if (state.processingState == ProcessingState.completed) {
         playNext();
-        if (searchQuery.isEmpty) {
-          playNext();
-        }
       }
     });
   }
@@ -79,28 +76,23 @@ class Playercontroller extends GetxController {
   }
 
   void playNext() async {
-    List<SongModel> songs = await audioQuery.querySongs(
-      ignoreCase: true,
-      orderType: OrderType.ASC_OR_SMALLER,
-      sortType: null,
-      uriType: UriType.EXTERNAL,
-    );
-    if (playIndex.value < songs.length - 1) {
+    List<SongModel> currentSongs = songs.toList(); // Current list of songs
+    if (playIndex.value < currentSongs.length - 1) {
       playIndex.value++;
-      playsong(songs[playIndex.value].uri, playIndex.value);
+      playsong(currentSongs[playIndex.value].uri, playIndex.value);
+    } else {
+      // Handle end of playlist or repeat logic here
+      // For example, go back to the beginning of the playlist
+      playIndex.value = 0;
+      playsong(currentSongs[playIndex.value].uri, playIndex.value);
     }
   }
 
   void playPrevious() async {
-    List<SongModel> songs = await audioQuery.querySongs(
-      ignoreCase: true,
-      orderType: OrderType.ASC_OR_SMALLER,
-      sortType: null,
-      uriType: UriType.EXTERNAL,
-    );
+    List<SongModel> currentSongs = songs.toList(); // Current list of songs
     if (playIndex.value > 0) {
       playIndex.value--;
-      playsong(songs[playIndex.value].uri, playIndex.value);
+      playsong(currentSongs[playIndex.value].uri, playIndex.value);
     }
   }
 
@@ -132,13 +124,14 @@ class Playercontroller extends GetxController {
       uriType: UriType.EXTERNAL,
     );
 
+    // Sort fetched songs by title
+    fetchedSongs
+        .sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+
     data = fetchedSongs;
 
-    if (searchQuery.isNotEmpty) {
-      search(searchQuery.value);
-    } else {
-      songs.value = data;
-    }
+    // Update songs list based on search query
+    search(searchQuery.value);
   }
 
   void search(String query) {
@@ -148,14 +141,24 @@ class Playercontroller extends GetxController {
     } else {
       songs.value = data
           .where((song) =>
-              song.title.toLowerCase().contains(query) ||
-              song.artist!.toLowerCase().contains(query))
+              song.title.toLowerCase().contains(searchQuery.value) ||
+              song.artist!.toLowerCase().contains(searchQuery.value))
           .toList();
+    }
+
+    // Ensure playIndex is within bounds after filtering
+    if (playIndex.value >= songs.length) {
+      playIndex.value = 0;
     }
   }
 
   void closeMiniPlayer() {
     audioPlayer.stop(); // Stop audio playback
     miniPlayerVisible.value = false; // Hide miniplayer
+  }
+
+  void stopplayback() {
+    audioPlayer.stop();
+    isplaying.value = false;
   }
 }

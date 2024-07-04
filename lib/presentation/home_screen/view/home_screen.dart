@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:FloBeat/core/constant/Textstyle.dart';
@@ -15,7 +17,36 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didpop) async {
+        if (!didpop) {
+          final result = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Do You Want To Exit "),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text("No"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    exit(0);
+                  },
+                  child: Text("Yes"),
+                ),
+              ],
+            ),
+          );
+          if (result) {
+            exit(0);
+          }
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.lightBlueAccent,
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
@@ -86,95 +117,76 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Expanded(
-                child: FutureBuilder(
-                  future: controller.querySongs(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          "Error loading songs: ${snapshot.error}",
-                          style: text(),
-                        ),
-                      );
-                    } else {
-                      var songs = controller.songs;
-                      if (songs.isEmpty) {
-                        return Center(
-                          child: Text(
-                            "No Song Found",
-                            style: text(),
-                          ),
-                        );
-                      } else {
-                        return ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: songs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              margin: EdgeInsets.only(bottom: 5),
-                              child: Ink(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(12),
-                                  ),
-                                  color: Color.fromARGB(87, 0, 0, 0),
-                                ),
-                                child: ListTile(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  title: Text(
-                                    songs[index].displayNameWOExt,
-                                    maxLines: 1,
-                                    style: text(),
-                                  ),
-                                  subtitle: Text(
-                                    songs[index].artist.toString() ==
-                                            "<unknown>"
-                                        ? "Unknown Artist"
-                                        : songs[index].artist.toString(),
-                                    style: text(),
-                                  ),
-                                  leading: QueryArtworkWidget(
-                                    id: songs[index].id,
-                                    type: ArtworkType.AUDIO,
-                                    artworkFit: BoxFit.cover,
-                                    nullArtworkWidget: const Icon(
-                                      Icons.music_note,
-                                      color: whiteColor,
-                                      size: 32,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => PlayerScreen(
-                                            data: controller.songs),
-                                      ),
-                                    );
-                                    controller.playsong(
-                                        songs[index].uri, index);
-                                  },
+                child: Obx(() {
+                  if (controller.songs.isEmpty) {
+                    return Center(child: Text("No Song Found", style: text()));
+                  } else {
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: controller.songs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        SongModel song = controller.songs[index];
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 5),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                              color: Color.fromARGB(87, 0, 0, 0),
+                            ),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              title: Text(
+                                song.displayNameWOExt,
+                                maxLines: 1,
+                                style: text(),
+                              ),
+                              subtitle: Text(
+                                song.artist.toString() == "<unknown>"
+                                    ? "Unknown Artist"
+                                    : song.artist.toString(),
+                                style: text(),
+                              ),
+                              leading: QueryArtworkWidget(
+                                id: song.id,
+                                type: ArtworkType.AUDIO,
+                                artworkFit: BoxFit.cover,
+                                nullArtworkWidget: const Icon(
+                                  Icons.music_note,
+                                  color: whiteColor,
+                                  size: 32,
                                 ),
                               ),
-                            );
-                          },
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PlayerScreen(
+                                      data: controller.songs,
+                                    ),
+                                  ),
+                                );
+                                controller.playsong(song.uri, index);
+                              },
+                            ),
+                          ),
                         );
-                      }
-                    }
-                  },
-                ),
+                      },
+                    );
+                  }
+                }),
               ),
             ],
           ),
         ),
-        floatingActionButton: MiniAudioPlayer()
-        //  Obx(
-        //   () =>
-        //       controller.isplaying.value ? MiniAudioPlayer() : SizedBox.shrink(),
-        // ),
-        );
+        floatingActionButton: Obx(
+          () => controller.miniPlayerVisible.value
+              ? MiniAudioPlayer()
+              : SizedBox.shrink(),
+        ),
+      ),
+    );
   }
 }
