@@ -86,6 +86,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             children: [
               TextField(
+                autofocus: false,
                 cursorColor: Colors.black,
                 controller: searchController,
                 onChanged: (value) {

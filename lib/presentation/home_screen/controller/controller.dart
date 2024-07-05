@@ -23,6 +23,8 @@ class Playercontroller extends GetxController {
 
   var miniPlayerVisible = false.obs; // State variable for miniplayer visibility
 
+  String? currentSongUri; // Track current playing song URI
+
   @override
   void onInit() {
     super.onInit();
@@ -56,14 +58,21 @@ class Playercontroller extends GetxController {
   }
 
   void playsong(String? uri, int index) async {
-    playIndex.value = index;
-    try {
-      await audioPlayer.setAudioSource(
-        AudioSource.uri(Uri.parse(uri!)),
-      );
+    if (currentSongUri == uri) {
+      // Resume playback
       audioPlayer.play();
-    } catch (e) {
-      print('Error playing song: $e');
+    } else {
+      // Play new song
+      playIndex.value = index;
+      currentSongUri = uri;
+      try {
+        await audioPlayer.setAudioSource(
+          AudioSource.uri(Uri.parse(uri!)),
+        );
+        audioPlayer.play();
+      } catch (e) {
+        print('Error playing song: $e');
+      }
     }
   }
 
@@ -155,10 +164,12 @@ class Playercontroller extends GetxController {
   void closeMiniPlayer() {
     audioPlayer.stop(); // Stop audio playback
     miniPlayerVisible.value = false; // Hide miniplayer
+    currentSongUri = null; // Reset current song URI
   }
 
   void stopplayback() {
     audioPlayer.stop();
     isplaying.value = false;
+    currentSongUri = null; // Reset current song URI
   }
 }

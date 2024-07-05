@@ -48,23 +48,25 @@ class PlayerScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Obx(
-                () => Container(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  height: 300,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: QueryArtworkWidget(
-                    id: data[controller.playIndex.value].id,
-                    artworkFit: BoxFit.cover,
-                    type: ArtworkType.AUDIO,
-                    artworkHeight: double.infinity,
-                    artworkWidth: double.infinity,
-                    nullArtworkWidget: Icon(
-                      Icons.music_note,
-                      size: 70,
+                () => SingleChildScrollView(
+                  child: Container(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    height: 300,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: QueryArtworkWidget(
+                      id: data[controller.playIndex.value].id,
+                      artworkFit: BoxFit.cover,
+                      type: ArtworkType.AUDIO,
+                      artworkHeight: double.infinity,
+                      artworkWidth: double.infinity,
+                      nullArtworkWidget: Icon(
+                        Icons.music_note,
+                        size: 70,
+                      ),
                     ),
                   ),
                 ),
@@ -73,50 +75,52 @@ class PlayerScreen extends StatelessWidget {
               //   height: 12,
               // ),
               Obx(
-                () => SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text(
-                        data[controller.playIndex.value].displayNameWOExt,
-                        textAlign: TextAlign.center,
-                        // overflow: TextOverflow.ellipsis,
-                        // maxLines: 2,
-                        style: TextStyle(
-                            color: bgColor,
-                            fontSize: 20,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        data[controller.playIndex.value].artist.toString() ==
-                                "<unknown>"
-                            ? "Unknown Artist"
-                            : data[controller.playIndex.value]
-                                .artist
-                                .toString(),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(
-                            color: bgColor,
-                            fontSize: 15,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Obx(
-                        () => Row(
-                          children: [
-                            Text(
-                              controller.position.value,
-                              style: TextStyle(color: bgColor),
-                            ),
-                            Expanded(
+                () => Column(
+                  children: [
+                    Text(
+                      data[controller.playIndex.value].displayNameWOExt,
+                      textAlign: TextAlign.center,
+                      // overflow: TextOverflow.ellipsis,
+                      // maxLines: 2,
+                      style: TextStyle(
+                          color: bgColor,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      data[controller.playIndex.value].artist.toString() ==
+                              "<unknown>"
+                          ? "Unknown Artist"
+                          : data[controller.playIndex.value].artist.toString(),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: bgColor,
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Obx(
+                      () => Row(
+                        children: [
+                          Text(
+                            controller.position.value,
+                            style: TextStyle(color: bgColor),
+                          ),
+                          Expanded(
+                            child: SliderTheme(
+                              data: SliderThemeData(
+                                  thumbShape: RoundSliderThumbShape(
+                                enabledThumbRadius: 5,
+                              )),
                               child: Slider(
                                 thumbColor: sliderColor,
                                 inactiveColor: bgColor,
@@ -130,116 +134,114 @@ class PlayerScreen extends StatelessWidget {
                                 },
                               ),
                             ),
-                            Text(
-                              controller.duration.value,
-                              style: TextStyle(color: bgColor),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  border: Border.all(color: Colors.white30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.white30, blurRadius: 5),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    controller.playsong(
-                                        data[controller.playIndex.value - 1]
-                                            .uri,
-                                        controller.playIndex.value - 1);
-                                  },
-                                  icon: Icon(
-                                    Icons.skip_previous_rounded,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
                           ),
-                          Obx(
-                            () => Expanded(
-                              flex: 2,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    border: Border.all(color: Colors.white30),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.white30, blurRadius: 5),
-                                    ],
-                                  ),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        if (controller.isplaying.value) {
-                                          controller.audioPlayer.pause();
-                                          controller.isplaying(false);
-                                        } else {
-                                          controller.audioPlayer.play();
-                                          controller.isplaying(true);
-                                        }
-                                      },
-                                      icon: controller.isplaying.value
-                                          ? Icon(
-                                              Icons.pause,
-                                              size: 30,
-                                              color: Colors.white,
-                                            )
-                                          : Icon(
-                                              Icons.play_arrow_rounded,
-                                              color: bgDarkColor,
-                                              size: 30,
-                                            )),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  border: Border.all(color: Colors.white30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.white30, blurRadius: 5),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    controller.playsong(
-                                        data[controller.playIndex.value + 1]
-                                            .uri,
-                                        controller.playIndex.value + 1);
-                                  },
-                                  icon: Icon(
-                                    Icons.skip_next_rounded,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          Text(
+                            controller.duration.value,
+                            style: TextStyle(color: bgColor),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                border: Border.all(color: Colors.white30),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.white30, blurRadius: 5),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  controller.playsong(
+                                      data[controller.playIndex.value - 1].uri,
+                                      controller.playIndex.value - 1);
+                                },
+                                icon: Icon(
+                                  Icons.skip_previous_rounded,
+                                  size: 30,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  border: Border.all(color: Colors.white30),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.white30, blurRadius: 5),
+                                  ],
+                                ),
+                                child: IconButton(
+                                    onPressed: () {
+                                      if (controller.isplaying.value) {
+                                        controller.audioPlayer.pause();
+                                        controller.isplaying(false);
+                                      } else {
+                                        controller.audioPlayer.play();
+                                        controller.isplaying(true);
+                                      }
+                                    },
+                                    icon: controller.isplaying.value
+                                        ? Icon(
+                                            Icons.pause,
+                                            size: 30,
+                                            color: Colors.white,
+                                          )
+                                        : Icon(
+                                            Icons.play_arrow_rounded,
+                                            color: bgDarkColor,
+                                            size: 30,
+                                          )),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                border: Border.all(color: Colors.white30),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.white30, blurRadius: 5),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  controller.playsong(
+                                      data[controller.playIndex.value + 1].uri,
+                                      controller.playIndex.value + 1);
+                                },
+                                icon: Icon(
+                                  Icons.skip_next_rounded,
+                                  size: 30,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],

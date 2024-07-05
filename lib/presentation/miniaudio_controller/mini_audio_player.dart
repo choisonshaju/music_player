@@ -1,3 +1,4 @@
+import 'package:FloBeat/core/constant/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:FloBeat/presentation/home_screen/controller/controller.dart';
@@ -31,7 +32,7 @@ class MiniAudioPlayer extends StatelessWidget {
                 ),
               ),
               padding: EdgeInsets.all(16),
-              height: 110,
+              height: 120,
               child: Column(
                 children: [
                   Padding(
@@ -46,7 +47,28 @@ class MiniAudioPlayer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 15),
+                  Expanded(
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackHeight: 1,
+                        thumbShape:
+                            RoundSliderThumbShape(enabledThumbRadius: 0),
+                      ),
+                      child: Slider(
+                        thumbColor: sliderColor,
+                        inactiveColor: bgColor,
+                        activeColor: sliderColor,
+                        min: Duration(seconds: 0).inSeconds.toDouble(),
+                        max: controller.max.value,
+                        value: controller.value.value,
+                        onChanged: (newValue) {
+                          controller.changePosition(newValue.toInt());
+                          newValue = newValue;
+                        },
+                      ),
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -79,6 +101,14 @@ class MiniAudioPlayer extends StatelessWidget {
                           controller.playNext();
                         },
                       ),
+                      IconButton(
+                          onPressed: () {
+                            Get.find<Playercontroller>().closeMiniPlayer();
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            size: 15,
+                          ))
                     ],
                   ),
                 ],
